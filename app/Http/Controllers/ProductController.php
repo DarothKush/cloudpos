@@ -31,9 +31,13 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        //
+        $product = Product::find($id);
+        if(!$product){
+            return response()->json(['message'=>'Product not found'],404);
+        }
+        return response()->json($product);
     }
 
     /**
@@ -47,16 +51,36 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string',
+            'price' => 'required|numeric',
+        ]);
+        $product = Product::find($id);
+        if (!$product) {
+            return response()->json(['message' => 'Product not found.'], 404);
+        }
+        $product->update($validatedData);
+
+        // Return the updated product and a success response
+        return response()->json([
+            'message' => 'Product successfully updated.',
+            'product' => $product,
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        if(!$product){
+            return response()->json(['message'=>'Product not found'],404);
+        }
+        $product->delete();
+        return response()->json(['message' => 'Product successfully deleted.'], 200);
     }
 }
