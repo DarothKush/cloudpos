@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -11,7 +13,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        // $users = User::with(['role'])->paginate(10);
+        // return UserResource::collection($users);
+        $users = User::with('roles')->get();
+        return $users;
     }
 
     /**
@@ -35,7 +40,11 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $users = User::with('roles')->find($id);
+        if(!$users){
+            return response()->json(['message'=>'Product not found'],404);
+        }
+        return response()->json($users);
     }
 
     /**
@@ -59,6 +68,12 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $users = User::fine($id);
+        if(!$users){
+            return response()->json(['message'=>'User not found'],404);
+        }
+        $users->delete();
+        return response()->json(['message' => 'User successfully deleted.'], 200);
+    }
     }
 }

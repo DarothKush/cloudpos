@@ -7,6 +7,8 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
+// 2|gkhAJzHgYZ1i9acTekNQZXNjxF7DkYubTdeuHXx29d0812ea
+
 class ProductController extends Controller
 {
     /**

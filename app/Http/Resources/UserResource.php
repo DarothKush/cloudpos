@@ -19,6 +19,9 @@ class UserResource extends JsonResource
             'user_name'=>$this->name,
             'user_email'=>$this->email,
             'user_created_at'=>$this->created_at,
+            'role'=>$this->whenLoaded('role',function(){
+                return new RoleResource($this->role);
+            })
         ];
     }
 }
